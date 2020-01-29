@@ -11,6 +11,7 @@ import {
 import Card from '../components/Card';
 import Input from '../components/Input';
 import Colors from '../constants/colors';
+import NumberContainer from '../components/NumberContainer';
 
 const StartGameScreen = props => {
 
@@ -25,27 +26,33 @@ const StartGameScreen = props => {
     }
 
     const resetInputHandler = () => {
-        console.log("reset");
         setEnteredValue('');
         setConfirmed(false);
     }
 
-    
+
     const confirmInputHandler = () => {
         const chosenNumber = parseInt(enteredValue);
-        if(isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99){
-            Alert.alert('Invalid number!', 'Number is not correct',[{text:'Okay', style: 'destructive', onPress: resetInputHandler}])
+        if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
+            Alert.alert('Invalid number!', 'Number is not correct', [{ text: 'Okay', style: 'destructive', onPress: resetInputHandler }])
             return;
         }
         setConfirmed(true);
         setSelectedNumber(chosenNumber);
         setEnteredValue('');
+        Keyboard.dismiss();
     }
 
     let confirmedOutput;
 
-    if(confirmed){
-    confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>
+    if (confirmed) {
+        confirmedOutput = (
+            <Card style={styles.summaryContainer}>
+                <Text>You selected</Text>
+                <NumberContainer>{selectedNumber}</NumberContainer>
+                <Button title="START GAME" />
+            </Card>
+        );
     }
 
     return (
@@ -66,15 +73,15 @@ const StartGameScreen = props => {
                     />
                     <View style={styles.buttonContainer}>
                         <View style={styles.button}>
-                            <Button title="Reset" 
-                            onPress={resetInputHandler} 
-                            color={Colors.accent} 
+                            <Button title="Reset"
+                                onPress={resetInputHandler}
+                                color={Colors.accent}
                             />
                         </View>
                         <View style={styles.button}>
-                            <Button title="Confirm" 
-                            onPress={confirmInputHandler} 
-                            color={Colors.primary} />
+                            <Button title="Confirm"
+                                onPress={confirmInputHandler}
+                                color={Colors.primary} />
                         </View>
                     </View>
                 </Card>
@@ -114,6 +121,10 @@ const styles = StyleSheet.create({
         width: 50,
         textAlign: 'center',
     },
+    summaryContainer: {
+        marginTop: 20,
+        alignItems: 'center',
+    }
 });
 
 export default StartGameScreen;
